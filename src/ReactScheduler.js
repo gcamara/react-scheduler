@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './App.module.scss';
+import styles from './ReactScheduler.module.scss';
 import { ReactComponent as ChevronLeft } from './assets/chevron-left-solid.svg';
 import { ReactComponent as ChevronRight } from './assets/chevron-right-solid.svg';
 
