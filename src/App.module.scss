@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+$secondaryColor:#ddd;
+$border: 1px $secondaryColor solid;
+$mainColor: white;
+$text-color: #444;
+
+body {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+.Scheduler {
+    width: 100vw;
+    box-sizing: border-box;
+
+    .schedulerControl {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 5px;
+        box-sizing: border-box;
+        color: $text-color;
+        font-size: 15pt;
+        border-bottom: $border;
+
+        svg {
+            width: 10px;
+            height: 15px;
+        }
+
+        .dateControl {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 20px;
+
+            .monthControl {
+            }
+        }
+
+        span {
+            margin: 0 5px;
+        }
+        
+        button {
+            border-radius: 100%;
+            background-color: transparent;
+            color: #444;
+            outline: none;
+            border: none;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color .2s ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+                background-color: lighten($secondaryColor, 5);
+            }
+
+            &:last-child {
+                margin-left: 10px;
+            }
+        }
+    }
+
+    .schedulerHeader {
+        width: 100%;
+        display: flex;
+        color: $text-color;
+        font-size: 11px;
+        font-weight: 700;
+
+        .schedulerColumn {
+            text-transform: capitalize;
+            border: none;
+            border-right: $border;
+            max-height: 20px;
+            min-height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+    }
+
+    .schedulerColumn {
+        width: 14.285%;
+        border: $border;
+        min-height: 15.2vh;
+        box-sizing: border-box;
+        transition: background-color .3s ease-in-out;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+
+        .dia {
+            font-size: 12px;
+            margin: 3px 0;
+            padding: 5px;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            border-radius: 100%;
+            transition: background-color .2s ease-in;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $secondaryColor;
+                &::after {
+                    color: $text-color;
+                }
+            }
+
+            &.today {
+                background-color: #AA43FF;
+                color: white
+            }
+        }
+
+    }
+
+    .schedulerRow {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+
+        .schedulerColumn {
+            border: none;
+            border-right: $border;
+            border-bottom: $border;
+
+            &:nth-child(7n) {
+                border-right: none;
+            }
+
+            &:nth-child(n+36) {
+                border-bottom: none;
+            }
+        }
+    }
+}
