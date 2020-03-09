@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import styles from './ReactScheduler.module.scss';
-import { ReactComponent as ChevronLeft } from './assets/chevron-left-solid.svg';
-import { ReactComponent as ChevronRight } from './assets/chevron-right-solid.svg';
+import { ReactComponent as ChevronLeft } from '../assets/chevron-left-solid.svg';
+import { ReactComponent as ChevronRight } from '../assets/chevron-right-solid.svg';
+import SchedulerEvent from './scheduler-event/SchedulerEvent';
 
 const dias = [ "dom", "seg", "ter", "qua", "qui", "sex", "sab"];
 const months = [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ]
 const getCurrentMonthName = index => months[index];
 const isToday = date => new Date().setHours(0,0,0,0) === date.setHours(0,0,0,0);
 
-function ReactScheduler() {
+function ReactScheduler({events}) {
   
   let header = dias.map(dia => <div key={dia} className={styles.schedulerColumn}>{dia}.</div>);
   
@@ -31,6 +32,7 @@ function ReactScheduler() {
   const [previousMonth, setPreviousMonth] = useState(prevMonth);
   const [nextMonth, setNextMonth] = useState(nxMonth);
   const [days, setDays] = useState([]);
+  const [event, setEvent] = useState({});
 
   const changeCurrentMonth = index => {
     let currMonth = currentDate.getMonth();
@@ -81,12 +83,40 @@ function ReactScheduler() {
       if (isToday(k))
         opts.push(styles.today);
 
+      let events = findEventsByDate(k);
       return <div key={i + Math.random()} className={styles.schedulerColumn}>
         <div className={opts.join(' ')}>{k.getDate()}</div>
+        <div className={styles.events}>
+            {events}
+        </div> 
       </div>;
     })
   }
-  
+
+  const findEventsByDate = (date) => {
+    let filtered = events.filter(event => event.date.setHours(0,0,0,0) === date.setHours(0,0,0,0));
+    let total = filtered.length;
+    if (total > 2) {
+      filtered = filtered.slice(0,2);
+    }
+    filtered = filtered.map((evt, index) => { 
+      return <div key={index} style={evt.styles} className={styles.event} onClick={_ => showEvent(event)}>
+        {event.title}
+        <SchedulerEvent event={evt} show={event === evt}/>
+      </div>
+    });
+    if (total > 2) {
+      filtered.push(<div key={date.getDate()} className={[styles.event, styles.plus].join(' ')}>{`Mais ${total - 2} eventos`}</div>)
+    }
+
+    return filtered;
+  }
+
+  const showEvent = event => {
+    console.log(event);
+    setEvent(event);
+  }
+
   return (
     <div className={styles.Scheduler}>
       <div className={styles.schedulerControl}>
@@ -107,6 +137,7 @@ function ReactScheduler() {
       </div>
       <div className={styles.schedulerRow}>
         {getFilledDays()}
+        <SchedulerEvent event={event} />
       </div>
     </div>
   );
