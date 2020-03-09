@@ -1,3 +1,81 @@
 .schedulerEvent {
     position: absolute;
+    overflow: hidden;
+    width: 400px;
+    height: auto;
+    box-sizing: border-box;
+    transition: left .25s ease, top .25s ease;
+    transform: scale(0);
+    transform-origin: top left;
+    min-height: 300px;
+    border-radius: 4px;
+
+    &.show {
+        padding: 10px;
+        background: white;
+        box-shadow: 0 0 25px -10px;
+        animation: pop .3s cubic-bezier(0, 0, 0, 1.5) forwards;
+    }
+
+
+    .header {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 10px;
+
+        button {
+            border-radius: 100%;
+            border: none;
+            outline: none;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            font-size: 11px;
+            transition: background-color .2s linear;
+            background-color: transparent;
+            color: #444;
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            svg {
+                width: 15px;
+                height: 15px;
+            }
+
+            &:hover {
+                background-color: #eee;
+                color: #444
+            }
+        }
+    }
+
+    @keyframes pop {
+        to {
+           transform: scale(1);
+        }
+    }
+
+    .image {
+        div {
+            width: 100%;
+            height: 150px;
+        }
+        margin-bottom: 10px;
+    }
+
+    .title {
+        font-size: 20px;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .description {
+        font-size: 11px;
+        margin-top: 5px;
+    }
 }

@@ -22,6 +22,7 @@ body {
 .Scheduler {
     width: 100vw;
     box-sizing: border-box;
+    overflow: hidden;
 
     .schedulerControl {
         display: flex;
@@ -154,10 +155,19 @@ body {
                 padding: 5px 10px;
                 border-radius: 4px;
                 background-color: #D269FF;
+                align-items: center;
                 box-sizing: border-box;
                 color: white;
                 margin-bottom: 5px;
+                position: relative;
                 cursor: pointer;
+
+                svg {
+                    width: 12px;
+                    height: 12px;
+                    color: white;
+                    margin-right: 5px;
+                }
 
                 &.plus {
                     background-color: #cecece;
@@ -173,6 +183,7 @@ body {
         width: 100%;
         display: flex;
         flex-wrap: wrap;
+        overflow: hidden;
 
         .schedulerColumn {
             border: none;

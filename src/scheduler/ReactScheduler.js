@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import styles from './ReactScheduler.module.scss';
 import { ReactComponent as ChevronLeft } from '../assets/chevron-left-solid.svg';
 import { ReactComponent as ChevronRight } from '../assets/chevron-right-solid.svg';
 import SchedulerEvent from './scheduler-event/SchedulerEvent';
+import { ReactSVG } from 'react-svg';
 
 const dias = [ "dom", "seg", "ter", "qua", "qui", "sex", "sab"];
 const months = [ "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" ]
@@ -13,7 +14,7 @@ function ReactScheduler({events}) {
   
   let header = dias.map(dia => <div key={dia} className={styles.schedulerColumn}>{dia}.</div>);
   
-  let currDate = new Date();
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
 
   const getPrevAndNextMonths = currDate => {
     let prevMonth = new Date(currDate);
@@ -26,13 +27,16 @@ function ReactScheduler({events}) {
   }
 
 
-  let [prevMonth, nxMonth] = getPrevAndNextMonths(currDate);
+  let [prevMonth, nxMonth] = getPrevAndNextMonths(new Date());
   
-  const [currentDate, setCurrentDate] = useState(currDate);
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [previousMonth, setPreviousMonth] = useState(prevMonth);
   const [nextMonth, setNextMonth] = useState(nxMonth);
   const [days, setDays] = useState([]);
   const [event, setEvent] = useState({});
+  const [filledDays, setFilledDays] = useState('');
+  const [positions, setPositions] = useState({});
+  const eventScreenRef = useRef();
 
   const changeCurrentMonth = index => {
     let currMonth = currentDate.getMonth();
@@ -42,15 +46,35 @@ function ReactScheduler({events}) {
     setDays([]);
     
     let [prev, next] = getPrevAndNextMonths(newDate);
+    setEvent(undefined);
     setNextMonth(next);
     setPreviousMonth(prev);
     setCurrentDate(newDate);
+    setCurrentMonth(newDate.getMonth());
   }
-
 
   const getLastDayOfMonth = (currDate) => new Date(currDate.getFullYear(), currDate.getMonth() + 1, 0).getDate();
 
-  const getFilledDays = () => {
+  const findEventsByDate = useCallback((date) => {
+    let filtered = events.filter(event => event.date.setHours(0,0,0,0) === date.setHours(0,0,0,0));
+    let total = filtered.length;
+    if (total > 2) {
+      filtered = filtered.slice(0,2);
+    }
+    filtered = filtered.map((evt, index) => { 
+      return <div key={index} style={evt.styles} className={styles.event} onClick={mouseEvent => showEvent(mouseEvent, evt, eventScreenRef)}>
+        {evt.icon ? <ReactSVG src={evt.icon} /> : ''}
+        {evt.title}
+      </div>
+    });
+    if (total > 2) {
+      filtered.push(<div key={date.getDate()} className={[styles.event, styles.plus].join(' ')}>{`Mais ${total - 2} eventos`}</div>)
+    }
+
+    return filtered;
+  }, [events, eventScreenRef])
+
+  const getFilledDays = useCallback(() => {
     let currDate = new Date(currentDate);
     currDate.setDate(1);
     let dayOfWeekIndex = currDate.getDay();
@@ -91,31 +115,32 @@ function ReactScheduler({events}) {
         </div> 
       </div>;
     })
-  }
+  }, [currentDate, days, findEventsByDate, nextMonth, previousMonth]);
 
-  const findEventsByDate = (date) => {
-    let filtered = events.filter(event => event.date.setHours(0,0,0,0) === date.setHours(0,0,0,0));
-    let total = filtered.length;
-    if (total > 2) {
-      filtered = filtered.slice(0,2);
+  
+  const showEvent = (mouseEvent, event, ref) => {
+    let parent = mouseEvent.nativeEvent.toElement.parentNode;
+    let positions = {
+      top: parent.offsetTop - 30,
+      left: parent.offsetLeft - ref.current.offsetWidth
     }
-    filtered = filtered.map((evt, index) => { 
-      return <div key={index} style={evt.styles} className={styles.event} onClick={_ => showEvent(event)}>
-        {event.title}
-        <SchedulerEvent event={evt} show={event === evt}/>
-      </div>
-    });
-    if (total > 2) {
-      filtered.push(<div key={date.getDate()} className={[styles.event, styles.plus].join(' ')}>{`Mais ${total - 2} eventos`}</div>)
+    positions.transformOrigin = `top right`;
+    
+    if (positions.left < 0) {
+      positions.left = parent.offsetLeft + parent.clientWidth + 10;
+      delete positions.transformOrigin;
     }
 
-    return filtered;
-  }
-
-  const showEvent = event => {
-    console.log(event);
+    if (positions.top + ref.current.offsetHeight > mouseEvent.view.innerHeight) {
+      positions.top -= ref.current.offsetHeight - 90
+    }
+    setPositions(positions);
     setEvent(event);
   }
+
+  useEffect(() => {
+    setFilledDays(getFilledDays())
+  }, [currentMonth, getFilledDays]);
 
   return (
     <div className={styles.Scheduler}>
@@ -136,8 +161,8 @@ function ReactScheduler({events}) {
          {header}
       </div>
       <div className={styles.schedulerRow}>
-        {getFilledDays()}
-        <SchedulerEvent event={event} />
+        {filledDays}
+        <SchedulerEvent reference={eventScreenRef} event={event} positions={positions} setEvent={setEvent} />
       </div>
     </div>
   );
