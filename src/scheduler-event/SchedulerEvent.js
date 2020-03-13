@@ -1,34 +1,35 @@
 import React from 'react';
-import styles from './SchedulerEvent.module.scss';
-import { ReactComponent as Close } from '../../assets/times-solid.svg';
+import './SchedulerEvent.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const SchedulerEvent = ({event, positions, reference, setEvent, ...rest}) => {
     let content = '';
-    let classes = [styles.schedulerEvent];
+    let classes = ["schedulerEvent"];
 
     if (event && event.id && positions) {
         content = (
             <React.Fragment>
                 {event.img ? 
-                <div className={styles.image}>
+                <div className="image" >
                     <div style={ { background: `url(${event.img})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat'} }></div>
                 </div> : '' }
-                <div className={styles.title}>
+                <div className="title" >
                     {event.title}
                 </div>
-                <div className={styles.description}>
+                <div className="description" >
                     {event.description}
                 </div>
             </React.Fragment>
         )
 
-        classes.push(styles.show);
+        classes.push("show");
     }
 
     return (<div className={classes.join(' ')} ref={reference} style={ positions }>
-        <div className={styles.header}>
+        <div className="header" >
             <button onClick={() => setEvent(null)}>
-                <Close />
+                <FontAwesomeIcon icon={faTimes} />
             </button>
         </div>
         {content}

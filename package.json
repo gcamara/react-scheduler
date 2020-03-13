@@ -1,34 +1,44 @@
 {
-  "name": "react-scheduler",
+  "name": "od-react-scheduler",
   "description": "A simple react scheduler",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "node-sass": "^4.13.1",
-    "react": "^16.13.0",
-    "react-dom": "^16.13.0",
-    "react-scripts": "3.4.0",
-    "react-svg": "^11.0.13"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+  "version": "0.2.3",
+  "private": false,
+  "main": "./build/index",
+  "babel": {
+    "presets": [
+      "@babel/react"
     ]
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/react-fontawesome": "^0.1.9",
+    "node-sass": "^4.13.1",
+    "react": "^16.13.0"
+  },
+  "author": "Gabriel Camara Carvalho",
+  "scripts": {
+    "build": "webpack"
+  },
+  "keywords": [
+    "Scheduler",
+    "OrthoDesign",
+    "React Scheduler",
+    "Date",
+    "Event"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "prop-types": "^15.7.2",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
   }
 }
