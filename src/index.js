@@ -58,7 +58,7 @@ function Scheduler({events, ...rest}) {
 
   const findEventsByDate = useCallback((date) => {
     if (events) {
-      let filtered = events.filter(event => event.date.setHours(0,0,0,0) === date.setHours(0,0,0,0));
+      let filtered = events.filter(event => event.startDate.setHours(0,0,0,0) === date.setHours(0,0,0,0));
       let total = filtered.length;
       if (total > 2) {
         filtered = filtered.slice(0,2);
